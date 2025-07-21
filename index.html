@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Astra AI</title>
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/8B5CF6/FFFFFF?text=A"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="highlight-dark-theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="highlight-light-theme" disabled>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="sidebar-closed">
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="chatbot-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">Astra AI</div>
+                <button id="sidebar-close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <button class="new-chat-btn">
+                <span>New Chat</span>
+                <i class="fas fa-pen-to-square"></i>
+            </button>
+
+            <div class="chat-history" id="chat-history-container"></div>
+
+            <div class="sidebar-qr-section" id="qr-btn">
+                <div class="qr-icon"><i class="fas fa-qrcode"></i></div>
+                <span>Share Chat</span>
+            </div>
+
+            <div id="qr-popup" class="qr-popup hidden">
+                <a href="https://charanbalaji2005.github.io/Astra-AI/" target="_blank">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://charanbalaji2005.github.io/Astra-AI/" alt="QR Code" id="qr-code-img">
+                </a>
+                <p>Scan to share this chat</p>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="profile-section" id="profile-section-clickable">
+                    <div class="profile-avatar" id="profile-avatar-initials">CB</div>
+                    <span class="profile-name" id="profile-name-sidebar">Charan Balaji</span>
+                    <button id="profile-options-btn" title="Options"><i class="fas fa-ellipsis-h"></i></button>
+                </div>
+
+                <div id="profile-menu" class="profile-menu">
+                    <a href="#" id="new-chat-menu-btn"><i class="fas fa-plus-circle"></i> New Chat</a>
+                    <a href="#" id="clear-history-btn"><i class="fas fa-trash-alt"></i> Clear History</a>
+                    <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+
+                <div class="profile-popup-card" id="profile-popup-card">
+                    <div class="profile-popup-header">
+                        <h3>Profile Details</h3>
+                        <button id="close-popup-btn">×</button>
+                    </div>
+
+                    <div class="profile-popup-body" id="profile-view">
+                        <p><strong>Name:</strong> <span id="profile-name-display">Charan Balaji</span></p>
+                        <p><strong>Age:</strong> <span id="profile-age-display">22</span></p>
+                        <p><strong>D.O.B:</strong> <span id="profile-dob-display">October 6, 2002</span></p>
+                        <p><strong>Email:</strong> <span id="profile-email-display">charan@example.com</span></p>
+                        <button id="edit-profile-btn"><i class="fas fa-edit"></i> Edit Details</button>
+                    </div>
+
+                    <div class="profile-popup-body" id="profile-edit" style="display: none;">
+                        <label>Name: <input type="text" id="edit-name" /></label>
+                        <label>Age: <input type="number" id="edit-age" /></label>
+                        <label>Date of Birth: <input type="date" id="edit-dob" /></label>
+                        <label>Email: <input type="email" id="edit-email" /></label>
+                        <button id="save-profile-btn"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="chat-area">
+            <div class="chat-header">
+                <button id="sidebar-toggle-btn">
+                    <span class="hamburger-top"></span>
+                    <span class="hamburger-middle"></span>
+                    <span class="hamburger-bottom"></span>
+                </button>
+
+                <a href="#" class="brand-logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; cursor: pointer; transition: opacity 0.2s ease;">
+                    <img src="https://placehold.co/64x64/8B5CF6/FFFFFF?text=Astra" alt="Astra AI Logo" style="height: 32px; width: 32px; object-fit: contain; border-radius: 50%;">
+                    <span class="brand-name" style="font-size: 1.2rem; font-weight: 600;">Astra AI</span>
+                </a>
+
+                <div class="header-actions">
+                    <button id="settings-btn" class="header-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div id="settings-menu" class="settings-menu">
+                        <a id="summarize-menu-btn"><i class="fas fa-file-alt"></i> Summarize Chat</a>
+                        <div class="theme-toggle-menu-item">
+                            <span><i class="fas fa-palette"></i> Theme</span>
+                            <label class="theme-switch">
+                                <input type="checkbox" id="theme-toggle-checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="theme-toggle-menu-item">
+                            <span><i class="fas fa-volume-up"></i> Voice</span>
+                            <label class="theme-switch">
+                                <input type="checkbox" id="voice-toggle-checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-content chat-padding" id="chat-content"></div>
+
+            <div class="chat-input-and-footer">
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <div id="image-preview-container" class="hidden"></div>
+                        <div class="input-container">
+                            <textarea id="chat-input" class="chat-input" placeholder="Message Astra AI..." rows="1"></textarea>
+                            <div class="input-buttons">
+                                <button id="upload-btn" title="Upload Image"><i class="fas fa-paperclip"></i></button>
+                                <input type="file" id="image-upload-input" accept="image/*" class="hidden">
+                                <button id="voice-input-btn" title="Voice Input"><i class="fas fa-microphone"></i></button>
+                                <button id="suggest-btn" class="suggest-btn" title="Suggest Reply">✨</button>
+                                <button id="send-btn" class="send-btn" disabled><i class="fas fa-arrow-up"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="chatbot-footer">
+                    <div class="footer-content">
+                        <span>© <span id="footer-year"></span> Astra AI. All rights reserved.</span>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div id="context-modal" class="modal-overlay">
+        <div class="modal">
+            <h3 id="modal-title">Rename Chat</h3>
+
+            <div id="rename-view">
+                <input type="text" id="rename-input" placeholder="New chat name">
+            </div>
+
+            <div id="confirmation-view" class="hidden"></div>
+            <div id="summary-view" class="modal-content-view hidden"></div>
+            <div id="modal-toolbar-container" class="modal-toolbar"></div>
+
+            <div>
+                <button id="modal-cancel-btn" class="cancel-btn">Cancel</button>
+                <button id="modal-confirm-btn" class="confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <template id="welcome-screen-template">
+        <div class="welcome-screen">
+            <div class="logo"><i class="fas fa-brain"></i></div>
+            <h1>Hi, I'm Astra AI.</h1>
+            <p>Your creative and helpful collaboration partner. How can I help you today?</p>
+            
+            <div class="trending-topics-container">
+                <i class="fas fa-fire"></i>
+                <marquee behavior="scroll" direction="left" id="trending-marquee">
+                    <span class="trending-topic">The rise of generative AI in art</span>
+                    <span class="trending-topic">Global economic outlook for the next quarter</span>
+                    <span class="trending-topic">Breakthroughs in battery technology</span>
+                    <span class="trending-topic">Sustainable travel destinations</span>
+                    <span class="trending-topic">The future of personalized medicine</span>
+                </marquee>
+            </div>
+
+            <div class="suggestion-cards">
+                <div class="suggestion-card" data-prompt="Explain quantum computing in simple terms">
+                    <h4>Explain quantum computing</h4>
+                    <p>in simple terms</p>
+                </div>
+                <div class="suggestion-card" data-prompt="Write a python script to scrape a website">
+                    <h4>Write a python script</h4>
+                    <p>to scrape a website</p>
+                </div>
+                <div class="suggestion-card" data-prompt="How does climate change affect oceans?">
+                    <h4>Climate Change & Oceans</h4>
+                    <p>explain the impact</p>
+                </div>
+                <div class="suggestion-card" data-prompt="Best practices for mental health while working remotely">
+                    <h4>Remote Work Wellness</h4>
+                    <p>tips for mental health</p>
+                </div>
+                <div class="suggestion-card" data-prompt="Generate a short story about a space explorer">
+                    <h4>Write a short story</h4>
+                    <p>about a lonely space explorer</p>
+                </div>
+                <div class="suggestion-card" data-prompt="What are the key principles of sustainable living?">
+                    <h4>Sustainable Living</h4>
+                    <p>key principles and ideas</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
