@@ -1,7 +1,5 @@
 ---
-Astra AI
-
-Astra AI is a **frontend-only web-based AI assistant UI**. It provides an interactive chat interface with multiple customization options, built entirely with HTML, CSS, and JavaScript.
+✨Astra AI✨
 ---
 
 🚀 Live Demo
