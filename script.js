@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Configuration ---
     const API_KEYS = {
-        gemini: "AIzaSyBua3w3ZFSfUeYEDdRKfJIkP2ob9mjT9U0", // IMPORTANT: Replace with your actual Gemini Key
+        gemini: "AIzaSyBtyrpElk7ml00JMnEyBJlpFm_8iJJWzYA", // IMPORTANT: Replace with your actual Gemini Key
     };
 
     const API_ENDPOINTS = {
@@ -1361,3 +1361,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeApp();
 });
+
