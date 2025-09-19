@@ -1,5 +1,3 @@
-Got it 👍 Since *Astra AI* is **only a frontend project**, we can simplify the README and remove backend/installation steps like `npm install`. Here’s a cleaner **README.md** for you:
-
 ---
 Astra AI
 
